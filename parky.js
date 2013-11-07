@@ -150,7 +150,10 @@ function initialize() {
 google.maps.event.addDomListener(window, 'load', initialize);
 
 function clearMarkers(){
-  geoRef.remove();
-  window.location.reload();
+  geoRef.remove(function(error){
+    if (error) alert('couldn\'t clear markers');
+    else
+      window.location.reload();
+  });
 }
 
