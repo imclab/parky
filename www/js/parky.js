@@ -231,6 +231,10 @@ var geoRef = new Firebase('https://parkyy.firebaseio.com/geodata'),
     restrict: 'A',
     link: function(scope, element, attrs){
 
+      element.bind('mousedown', function(e){
+        e.preventDefault();
+      });
+
       navigator.geolocation.getCurrentPosition(
         function(pos){
           initialize(pos, element);
