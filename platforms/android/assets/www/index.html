@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+    <head>
+      <meta charset="utf-8">
+      <title>Parky</title>
+      <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
+
+      <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
+      <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-simple-login.js'></script>
+      <script type="text/javascript" src="js/geoFire.js"></script>
+
+      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGBlm0sR7qvyOtPx3VkZMR_nijk6XYiHI&sensor=true">
+      </script>
+
+      <link rel="stylesheet" href="css/ionic.css">
+      <link rel="stylesheet" href="css/parky.css">
+
+      <script src="js/ionic.js"></script>
+      <script src="js/ionic-angular.js"></script>
+      <script src='js/angularfire.js'></script>
+      <script src='cordova.js'></script>
+
+      <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.js"></script>
+
+      <link rel="stylesheet" type="text/css" href="css/parky.css"></link>
+      <script type='text/javascript' src='js/parky.js'></script>
+      
+    </head>
+    <body ng-app="parky">
+
+      <ng-view></ng-view>
+
+      <script id="login.html" type="text/ng-template">
+        <header class="bar bar-header bar-calm">
+          <h1 class="title">Parky</h1>
+        </header>
+        <content has-header="true" scroll="false">
+          <form id="login_form" method="post">
+            <div class="list">
+              <label class="item item-input">
+                <input type="text" ng-model="loginForm.email" placeholder="Email">
+              </label>
+              <label class="item item-input">
+                <input type="password" ng-model="loginForm.password" placeholder="password">
+              </label>
+              <button class="button button-block button-stable" ng-click="login(loginForm)">Login</button>
+            </div>
+          </form>
+          <div>{{error}}</div>
+        </content>
+      </script>
+
+      <script id="map.html" type="text/ng-template">
+        <side-menu>
+          <pane side-menu-content>
+            <header class="bar bar-header bar-calm">
+              <button class="button button-calm" ng-click="toggleMenu()">
+                <i class="icon ion-navicon"></i>
+              </button>
+              <h1 class="title">Parky</h1> 
+              <button class="button button-calm" ng-click="logout()">
+                <i class="icon ion-log-out"></i>
+              </button>
+            </header>
+            <content has-header="true">
+              <div id="mapContainer">
+                <div google-map class="map"></div>
+              </div>
+              <button class="button button-block button-energized">Share Spot</button>
+            </content>
+          </pane>
+          <menu side="left">
+            <content scroll="false">
+              <div>Hello</div>
+            </content>
+          </menu>
+        </side-menu>
+      </script>
+    </body>
+</html>

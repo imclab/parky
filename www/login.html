@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+    <head>
+        <title>Login</title>
+        <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+        <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
+        <script type='text/javascript'
+        src='https://cdn.firebase.com/v0/firebase-simple-login.js'>
+</script>
+<script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script>
+      var parkRef = new Firebase('https://parkyy.firebaseio.com');    
+
+      function loginCallback(error, user){
+        if (error){
+          alert(error);
+        }
+        else if (user){
+          window.location.href = "index.html";
+        }
+      }
+      var auth = new FirebaseSimpleLogin(parkRef, loginCallback);
+
+      $(function(){
+        $('#login_form').on('submit', function(event){
+          event.preventDefault();
+          auth.login('password', {
+            email: $(this).find('input[type="text"]').val(),
+            password: $(this).find('input[type="password"]').val()
+          });
+          return false;
+        });
+      });
+
+    </script> 
+    </head>
+    <body>
+      <div id="fuck">skdfksjdf</div>
+      <form id="login_form" method="post">
+        Email: <input type="text" name="username">
+        Password: <input type="password" name="password">
+        <input type="submit" value="Submit">
+    </body>
+</html>
