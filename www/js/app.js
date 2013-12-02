@@ -13,6 +13,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 			})
 })
 
+
 .controller('LoginCtrl', function($scope, Auth){
   $scope.loginForm = {};
 
@@ -22,7 +23,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
 })
 
-.controller('MapCtrl', function($scope, $location, Auth){
+.controller('MapCtrl', function($scope, $location, Auth, Map){
 
     $scope.logout = function(){
       Auth.logout();
@@ -31,6 +32,14 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
     $scope.toggleMenu = function() {
       $scope.sideMenuController.toggleLeft();
-    }
+    };
+
+    $scope.blah = function() {
+      alert(Map.getMap());
+    };
+    
+    $scope.$on('locationChange', function(coords){
+      Map.updateUserLocation(coords.latitude, coords.longitude);
+    });
 
 })

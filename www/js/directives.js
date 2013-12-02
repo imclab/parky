@@ -38,11 +38,9 @@ angular.module('parky.directives', ['parky.services'])
   
   return {
     restrict: 'A',
-    controller: function($scope, $rootScope, Map, getLocation){
-      this.getLocation = getLocation;
-      this.registerMap = function(map){
-        Map.setMap(map);
-      };
+    controller: function($scope, $rootScope, Map, Location){
+      this.getLocation = Location.getLocation;
+      this.Map = Map;
     },
     link: function(scope, element, attrs, ctrl){
 
@@ -158,9 +156,13 @@ angular.module('parky.directives', ['parky.services'])
 
       ctrl.getLocation().then(
         function(pos){
-          mapOptions.center = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+          var lat = pos.coords.latitude;
+          var lon = pos.coords.longitude;
+          mapOptions.center = new google.maps.LatLng(lat, lon);
           map = new google.maps.Map(element[0], mapOptions);
-          ctrl.registerMap(map);
+          ctrl.Map.setMap(map);
+          ctrl.Map.setUserLocation(lat, lon);
+
         },
         function(error){
           alert(error);

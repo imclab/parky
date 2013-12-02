@@ -35,35 +35,96 @@ angular.module('parky.services', ['firebase'])
   }
 }])
 
-.factory('getLocation', function($q){
-  return function(){
+.service('Location', function($rootScope, $q){
+
+  var watchId;
+
+  this.getLocation = function(){
     var defer = $q.defer();
 
-      navigator.geolocation.getCurrentPosition(
-        function(position) {
-          defer.resolve(position);
-        },
-        function(error) {
-          defer.reject(error);
-        },
-        { enableHighAccuracy: true }
-      );
+    navigator.geolocation.getCurrentPosition(
+      function(position) {
+        defer.resolve(position);
+      },
+      function(error) {
+        defer.reject(error);
+      },
+      { enableHighAccuracy: true }
+    );
 
-      return defer.promise;
+    return defer.promise;
+  };
+
+  
+  this.startTracking = function(){
+    watchId = navigator.geolocation.watchPosition(
+      function(pos){
+        $rootScope.$broadcast("locationChange", {
+          coords: pos.coords
+        });
+      },
+      function(error){
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            alert("User denied the request for Geolocation.");
+            break;
+          case error.POSITION_UNAVAILABLE:
+            alert("Location information is unavailable.");
+            break;
+          case error.TIMEOUT:
+            alert("The request to get user location timed out.");
+            break;
+          case error.UNKNOWN_ERROR:
+            alert("An unknown error occurred.");
+            break;
+        }
+      },
+      { enableHighAccuracy: true, timeout: 20000, maximumAge: 5000 }
+    );
   }
+
 })
 
-.factory('Map', function(){
+.service('Map', function(){
 
-  var latitude, longitude, map;
+  var _map;
+  var userMarker;
 
   this.setMap = function(map){
-    this.map = map;
+    _map = map;
   };
 
   this.getMap = function(){
-    return map;
+    return _map;
   }
 
-  
+  this.setUserLocation = function(lat, lon){
+    userMarker = new google.maps.Marker({
+      clickable: false,
+      position: new google.maps.LatLng(lat, lon), 
+      icon: {
+        url: 'http://maps.gstatic.com/mapfiles/mobile/mobileimgs1.png',
+        size: new google.maps.Size(22, 22),
+        origin: new google.maps.Point(0,0),
+        anchor: new google.maps.Point(0,11) 
+      },
+      map: _map,
+    });
+  }
+
+  this.updateUserLocation = function(lat, lon){
+    userMarker.setMap(null);
+    userMarker = new google.maps.Marker({
+      clickable: false,
+      position: new google.maps.LatLng(lat, lon), 
+      icon: {
+        url: 'http://maps.gstatic.com/mapfiles/mobile/mobileimgs1.png',
+        size: new google.maps.Size(22, 22),
+        origin: new google.maps.Point(0,0),
+        anchor: new google.maps.Point(0,11) 
+      },
+      map: _map,
+    }); 
+  }
+
 })
