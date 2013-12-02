@@ -23,7 +23,9 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
 })
 
-.controller('MapCtrl', function($scope, $location, Auth, Map){
+.controller('MapCtrl', function($scope, $location, Auth, Map, Location){
+
+    Location.startTracking();
 
     $scope.logout = function(){
       Auth.logout();
@@ -34,11 +36,16 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       $scope.sideMenuController.toggleLeft();
     };
 
-    $scope.blah = function() {
-      alert(Map.getMap());
+    $scope.shareSpot = function() {
+       
     };
     
+    $scope.snapToLocation = function(){
+      Map.getMap().panTo(new google.maps.LatLng(Map.currentCoords.latitude, Map.currentCoords.longitude)); 
+    }
+
     $scope.$on('locationChange', function(coords){
+      alert('loc changed');
       Map.updateUserLocation(coords.latitude, coords.longitude);
     });
 

@@ -110,10 +110,11 @@ angular.module('parky.services', ['firebase'])
       },
       map: _map,
     });
+    this.currentCoords = {latitude: lat, longitude: lon};
   }
 
   this.updateUserLocation = function(lat, lon){
-    userMarker.setMap(null);
+    if (!_map) return;
     userMarker = new google.maps.Marker({
       clickable: false,
       position: new google.maps.LatLng(lat, lon), 
@@ -125,6 +126,7 @@ angular.module('parky.services', ['firebase'])
       },
       map: _map,
     }); 
+    this.currentCoords = {latitude: lat, longitude: lon};
   }
 
 })
