@@ -23,8 +23,6 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 })
 
 .controller('MapCtrl', function($scope, $location, Auth){
-var geoRef = new Firebase('https://parkyy.firebaseio.com/geodata'),
-    geo = new geoFire(geoRef);
 
     $scope.logout = function(){
       Auth.logout();
@@ -34,6 +32,5 @@ var geoRef = new Firebase('https://parkyy.firebaseio.com/geodata'),
     $scope.toggleMenu = function() {
       $scope.sideMenuController.toggleLeft();
     }
-
 
 })

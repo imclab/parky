@@ -35,16 +35,35 @@ angular.module('parky.services', ['firebase'])
   }
 }])
 
-.factory('getLocation', function($scope){
+.factory('getLocation', function($q){
   return function(){
-    var q = $q.defer();
+    var defer = $q.defer();
 
-      navigator.geolocation.getCurrentPosition(function(position) {
-        q.resolve(position);
-      }, function(error) {
-        q.reject(error);
-      });
+      navigator.geolocation.getCurrentPosition(
+        function(position) {
+          defer.resolve(position);
+        },
+        function(error) {
+          defer.reject(error);
+        },
+        { enableHighAccuracy: true }
+      );
 
-      return q.promise;
+      return defer.promise;
   }
+})
+
+.factory('Map', function(){
+
+  var latitude, longitude, map;
+
+  this.setMap = function(map){
+    this.map = map;
+  };
+
+  this.getMap = function(){
+    return map;
+  }
+
+  
 })
