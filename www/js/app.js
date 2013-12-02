@@ -37,6 +37,29 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     };
 
     $scope.shareSpot = function() {
+      var dirDisplay = new google.maps.DirectionsRenderer();
+      var dirService = new google.maps.DirectionsService();
+      var lat = Map.currentCoords.latitude;
+      var lon = Map.currentCoords.longitude;
+      var latLon = new google.maps.LatLng(lat, lon);
+      var request = {
+        origin: latLon,
+        destination: latLon, 
+        travelMode: google.maps.TravelMode.DRIVING
+      };
+
+      dirDisplay.setMap(Map.getMap());
+      dirService.route(request, function(response, status){
+        if (status == google.maps.DirectionsStatus.OK) {
+          dirDisplay.setOptions({ preserveViewport: true });
+          var marker = new google.maps.Marker({
+            clickable: false,
+            position: response.routes[0].legs[0].start_location, 
+            icon: 'img/sportscar.png',
+            map: Map.getMap(),
+          });
+        }
+      });
        
     };
     
@@ -45,7 +68,6 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     }
 
     $scope.$on('locationChange', function(coords){
-      alert('loc changed');
       Map.updateUserLocation(coords.latitude, coords.longitude);
     });
 
