@@ -15,6 +15,12 @@
       <link rel="stylesheet" href="css/parky.css">
 
       <script src="js/ionic.js"></script>
+      <script src="js/ionic.js"></script>
+      <script src="js/angular/angular.js"></script>
+      <script src="js/angular/angular-animate.js"></script>
+      <script src="js/angular/angular-route.js"></script>
+      <script src="js/angular/angular-touch.js"></script>
+      <script src="js/angular/angular-sanitize.js"></script>
       <script src="js/ionic-angular.js"></script>
       <script src='js/angularfire.js'></script>
       <script src='cordova.js'></script>
@@ -22,7 +28,9 @@
       <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular-route.js"></script>
 
       <link rel="stylesheet" type="text/css" href="css/parky.css"></link>
-      <script type='text/javascript' src='js/parky.js'></script>
+      <script type='text/javascript' src='js/app.js'></script>
+      <script type='text/javascript' src='js/directives.js'></script>
+      <script type='text/javascript' src='js/services.js'></script>
       
     </head>
     <body ng-app="parky">
@@ -50,7 +58,7 @@
       </script>
 
       <script id="map.html" type="text/ng-template">
-        <side-menu>
+        <side-menus>
           <pane side-menu-content>
             <header class="bar bar-header bar-calm">
               <button class="button button-calm" ng-click="toggleMenu()">
@@ -61,19 +69,27 @@
                 <i class="icon ion-log-out"></i>
               </button>
             </header>
-            <content has-header="true">
+            <content has-header="true" >
               <div id="mapContainer">
+                <img id="target" src="img/test.png">
                 <div google-map class="map"></div>
               </div>
-              <button class="button button-block button-energized">Share Spot</button>
+              <button ng-click="shareSpot()" class="button button-block button-energized">Share Spot</button>
             </content>
           </pane>
-          <menu side="left">
-            <content scroll="false">
-              <div>Hello</div>
+          <side-menu side="left">
+            <header class="bar bar-header bar-calm">
+              <h1 class="title">Options</h1>
+            </header>
+            <content has-header="true" scroll="false">
+              <list>
+                <item> 
+                  Hello World
+                </item>
+              </list>
             </content>
-          </menu>
-        </side-menu>
+          </side-menu>
+        </side-menus>
       </script>
     </body>
 </html>
