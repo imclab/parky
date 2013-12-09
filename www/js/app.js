@@ -10,20 +10,41 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 				templateUrl : 'map.html',
 				controller  : 'MapCtrl',
         authRequired: true
-			})
+			});
 })
 
 
-.controller('LoginCtrl', function($scope, Auth){
+.controller('LoginCtrl', function($scope, Auth, Modal){
   $scope.loginForm = {};
 
   $scope.login = function(data){
     Auth.login(data.email, data.password);
   };
 
+  // Load the modal from the given template URL
+  Modal.fromTemplateUrl('registermodal.html', function(modal) {
+    $scope.modal = modal;
+  }, {
+    // Use our scope for the scope of the modal to keep it simple
+    scope: $scope,
+    // The animation we want to use for the modal entrance
+    animation: 'slide-in-up'
+  });
+
+  $scope.openModal = function() {
+    $scope.modal.show();
+  };
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  };
+
 })
 
-.controller('MapCtrl', function($scope, $location, Auth, Map, Location){
+.controller('MapCtrl', function($scope, $location, Auth, Map, Location, FirebaseService){
+
+    var geoRef = new Firebase('https://parkyy.firebaseio.com/geo'),
+    
+    geo = new geoFire(geoRef);
 
     Location.startTracking();
 
@@ -49,17 +70,28 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       };
 
       dirDisplay.setMap(Map.getMap());
+
+      // Get directions from a point to itself to get nearest street point
       dirService.route(request, function(response, status){
         if (status == google.maps.DirectionsStatus.OK) {
           dirDisplay.setOptions({ preserveViewport: true });
+          pos = response.routes[0].legs[0].start_location;
           var marker = new google.maps.Marker({
             clickable: false,
-            position: response.routes[0].legs[0].start_location, 
+            position: pos, 
             icon: 'img/sportscar.png',
             map: Map.getMap(),
           });
+          FirebaseService.getNextIdAndInc().then(function(id){
+            spot = {
+              time: new Date().getTime()
+            };
+            geo.insertByLocWithId([pos.lat(), pos.lng()], id, spot);
+          }); 
+
         }
       });
+      $scope.snapToLocation();
        
     };
     

@@ -43,7 +43,6 @@ angular.module('parky.directives', ['parky.services'])
       this.Map = Map;
     },
     link: function(scope, element, attrs, ctrl){
-
       var map;
       var mapOptions = {
         zoom: 15,
@@ -162,7 +161,8 @@ angular.module('parky.directives', ['parky.services'])
           map = new google.maps.Map(element[0], mapOptions);
           ctrl.Map.setMap(map);
           ctrl.Map.setUserLocation(lat, lon);
-
+          google.maps.event.addListenerOnce(ctrl.Map.getMap(), 'idle', function(){
+      });
         },
         function(error){
           alert(error);
@@ -172,6 +172,8 @@ angular.module('parky.directives', ['parky.services'])
       element.bind('mousedown', function(e){
         e.preventDefault();
       });
+
+
     }
   }
 })

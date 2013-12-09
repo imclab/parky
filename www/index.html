@@ -45,16 +45,43 @@
           <form id="login_form" method="post">
             <div class="list">
               <label class="item item-input">
-                <input type="text" ng-model="loginForm.email" placeholder="Email">
+                <span class="input-label">Email</span>
+                <input type="text" ng-model="loginForm.email" placeholder="">
               </label>
               <label class="item item-input">
-                <input type="password" ng-model="loginForm.password" placeholder="password">
+                <span class="input-label">Password</span>
+                <input type="password" ng-model="loginForm.password" placeholder="">
               </label>
               <button class="button button-block button-stable" ng-click="login(loginForm)">Login</button>
+              <button class="button button-block button-stable" ng-click="openModal()">No Account? Register here</button>
             </div>
           </form>
           <div>{{error}}</div>
         </content>
+      </script>
+
+      <script id="registermodal.html" type="text/ng-template">
+        <div class="modal">
+          <header class="bar bar-header bar-calm">
+            <h1 class="title">Register</h1>
+            <button class="button button-clear" ng-click="closeModal()">Cancel</button>
+          </header>
+          <content has-header="true">
+            <div class="padding">
+              <div class="list">
+                <label class="item item-input">
+                  <span class="input-label">Email</span>
+                  <input type="text" placeholder="">
+                </label>
+                <label class="item item-input">
+                  <span class="input-label">Password</span>
+                  <input type="text" placeholder="">
+                </label>
+                <button class="button button-full button-calm" ng-click="closeModal()">Create Account</button>
+              </div>
+            </div>
+          </content>
+        </div>
       </script>
 
       <script id="map.html" type="text/ng-template">
