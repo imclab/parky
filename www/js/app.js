@@ -50,6 +50,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
     $scope.logout = function(){
       Auth.logout();
+      Location.stopTracking();
       $location.path('/');
     };
 

@@ -70,14 +70,11 @@ angular.module('parky.services', ['firebase'])
   this.getLocation = function(){
     var defer = $q.defer();
 
-    console.log('getting location');
     navigator.geolocation.getCurrentPosition(
       function(position) {
-        console.log('get location success');
         defer.resolve(position);
       },
       function(error) {
-        console.log('get location fail');
         defer.reject(error);
       },
       { enableHighAccuracy: true, timeout: 3000, maximumAge: 0}
@@ -112,7 +109,11 @@ angular.module('parky.services', ['firebase'])
       },
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 5000 }
     );
-  }
+  };
+
+  this.stopTracking = function(){
+    navigator.geolocation.clearWatch(watchId);
+  };
 
 })
 
