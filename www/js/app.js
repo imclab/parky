@@ -14,16 +14,28 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 })
 
 
-.controller('LoginCtrl', function($scope, Auth, Modal){
+.controller('LoginCtrl', function($scope, $rootScope, $location, Auth, Modal){
   $scope.loginForm = {};
+  $scope.registerForm ={};
 
   $scope.login = function(data){
     Auth.login(data.email, data.password);
   };
 
+  $scope.register = function(data){
+    Auth.signup(data.email, data.password,
+      function(error, user){
+        if (error) $scope.registerForm.error = error;
+        else if (user){
+         // $scope.closeModal();
+//           $location.path('/map');
+        }
+      }
+    );
+  };
   // Load the modal from the given template URL
   Modal.fromTemplateUrl('registermodal.html', function(modal) {
-    $scope.modal = modal;
+    $rootScope.modal = modal;
   }, {
     // Use our scope for the scope of the modal to keep it simple
     scope: $scope,
@@ -32,16 +44,17 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
   });
 
   $scope.openModal = function() {
-    $scope.modal.show();
+    $rootScope.modal.show();
   };
   $scope.closeModal = function() {
-    $scope.modal.hide();
+    $rootScope.modal.hide();
   };
 
 })
 
-.controller('MapCtrl', function($scope, $location, Auth, Map, Location, FirebaseService){
+.controller('MapCtrl', function($scope, $rootScope, $location, Auth, Map, Location, FirebaseService){
 
+    $rootScope.modal.hide();
     var geoRef = new Firebase('https://parkyy.firebaseio.com/geo'),
     
     geo = new geoFire(geoRef);

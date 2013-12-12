@@ -43,7 +43,7 @@
         </header>
         <content has-header="true" scroll="false">
           <form id="login_form" method="post">
-            <div class="list">
+            <div class="list padding">
               <label class="item item-input">
                 <span class="input-label">Email</span>
                 <input type="text" ng-model="loginForm.email" placeholder="">
@@ -52,8 +52,8 @@
                 <span class="input-label">Password</span>
                 <input type="password" ng-model="loginForm.password" placeholder="">
               </label>
-              <button class="button button-block button-stable" ng-click="login(loginForm)">Login</button>
-              <button class="button button-block button-stable" ng-click="openModal()">No Account? Register here</button>
+              <button class="button button-block button-calm" ng-click="login(loginForm)">Login</button>
+              <button class="button button-block button-calm" ng-click="openModal()">No Account? Register here</button>
             </div>
           </form>
           <div>{{error}}</div>
@@ -67,19 +67,21 @@
             <button class="button button-clear" ng-click="closeModal()">Cancel</button>
           </header>
           <content has-header="true">
-            <div class="padding">
-              <div class="list">
-                <label class="item item-input">
-                  <span class="input-label">Email</span>
-                  <input type="text" placeholder="">
-                </label>
-                <label class="item item-input">
-                  <span class="input-label">Password</span>
-                  <input type="text" placeholder="">
-                </label>
-                <button class="button button-full button-calm" ng-click="closeModal()">Create Account</button>
+            <form id="register_form" method="post">
+              <div class="padding">
+                <div class="list">
+                  <label class="item item-input">
+                    <span class="input-label">Email</span>
+                    <input type="text" ng-model="registerForm.email" placeholder="">
+                  </label>
+                  <label class="item item-input">
+                    <span class="input-label">Password</span>
+                    <input type="password" ng-model="registerForm.password" placeholder="">
+                  </label>
+                  <button class="button button-full button-calm" ng-click="register(registerForm)">Create Account</button>
+                </div>
               </div>
-            </div>
+            </form>
           </content>
         </div>
       </script>

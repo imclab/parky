@@ -27,10 +27,8 @@ angular.module('parky.services', ['firebase'])
       return angularFireAuth.logout();
     },
 
-    signup: function(email, password){
-      angularFireAuth.createUser(email, password, function(err, user){
-        if (err) $rootScope.error = err;
-      });
+    signup: function(email, password, cb){
+      angularFireAuth.createUser(email, password, cb);
     }
   }
 }])
