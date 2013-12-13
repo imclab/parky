@@ -1,6 +1,6 @@
 angular.module('parky.directives', ['parky.services'])
 
-.directive("googleMap", function(Map, Location) {
+.directive("googleMap", function($rootScope, Map, Location) {
 
   return {
     restrict: 'A',
@@ -123,11 +123,23 @@ angular.module('parky.directives', ['parky.services'])
           map = new google.maps.Map(element[0], mapOptions);
           Map.setMap(map);
           Map.setUserLocation(lat, lon);
+          $rootScope.$broadcast('mapLoad');
           //Location.startTracking();
           //google.maps.event.addListenerOnce(Map.getMap(), 'idle', function(){});
+          scope.$watch('spots', function(newSpots, oldSpots){
+            if (oldSpots === newSpots) return;
+            var spot = newSpots[newSpots.length-1]
+            var marker = new google.maps.Marker({
+                clickable: false,
+                position: new google.maps.LatLng(spot.lat, spot.lng), 
+                icon: 'img/sportscar.png',
+                map: map,
+              });
+            
+          }, true);
         },
         function(error){
-          alert(error);
+          alert(error.code + ": "+ error.message);
         }
       );
 
@@ -135,6 +147,7 @@ angular.module('parky.directives', ['parky.services'])
         e.preventDefault();
       });
 
+      
 
     }
   }

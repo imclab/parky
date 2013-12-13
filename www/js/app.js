@@ -56,15 +56,17 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
     if ($rootScope.modal) $rootScope.modal.hide();
 
-    //Location.startTracking();
+    $scope.spots = [];
 
-    $scope.markers = [];
-
-    var geoRef = new Firebase('https://parkyy.firebaseio.com/geo/geoFire/dataByHash');  
-
-    geoRef.on('child_added', function(snapshot){
-      alert(JSON.stringify(snapshot.val()));
-    }); 
+    var geoRef = new Firebase('https://parkyy.firebaseio.com/geo/geoFire/dataById');  
+    
+    //no idea why this is necessary, but firebase apparently breaks geolocation
+    $scope.$on('mapLoad', function(){
+      geoRef.on('child_added', function(snapshot){
+        $scope.spots.push(snapshot.val());
+        $scope.$apply();
+      });
+    });  
 
     $scope.logout = function(){
       Auth.logout();
@@ -95,15 +97,11 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         if (status == google.maps.DirectionsStatus.OK) {
           dirDisplay.setOptions({ preserveViewport: true });
           pos = response.routes[0].legs[0].start_location;
-          var marker = new google.maps.Marker({
-            clickable: false,
-            position: pos, 
-            icon: 'img/sportscar.png',
-            map: Map.getMap(),
-          });
           FirebaseService.getNextIdAndInc().then(function(id){
             spot = {
-              time: new Date().getTime()
+              time: new Date().getTime(),
+              lat: pos.lat(),
+              lng: pos.lng()
             };
             FirebaseService.insertWithId(pos, id, spot); 
           }); 

@@ -72,6 +72,11 @@ angular.module('parky.services', ['firebase'])
 .service('Location', function($rootScope, $q){
 
   var watchId;
+  var currentPos = null;
+
+  this.getCurrentLocation = function(){
+    return currentPos;
+  };
 
   this.getLocation = function(){
     var defer = $q.defer();
@@ -91,11 +96,13 @@ angular.module('parky.services', ['firebase'])
 
   
   this.startTracking = function(){
+    var defer = $q.defer();
     watchId = navigator.geolocation.watchPosition(
       function(pos){
         $rootScope.$broadcast("locationChange", {
           coords: pos.coords
         });
+        currentPos = pos;
       },
       function(error){
         switch(error.code) {
@@ -113,7 +120,7 @@ angular.module('parky.services', ['firebase'])
             break;
         }
       },
-      { enableHighAccuracy: true, timeout: 30000, maximumAge: 5000 }
+      { enableHighAccuracy: true, timeout: 30000, maximumAge: 0 }
     );
   };
 
