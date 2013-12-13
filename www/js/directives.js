@@ -1,47 +1,9 @@
 angular.module('parky.directives', ['parky.services'])
 
-.directive("googleMap", function() {
+.directive("googleMap", function(Map, Location) {
 
-  /*
-    var watchId = navigator.geolocation.watchPosition(
-      function(pos){
-        position = pos;
-        if (scope.centerOnUser) map.setCenter(pos);
-      },
-      function(error){
-        alert(error);
-      }
-    );
-
-    var geoRef = new Firebase('https://parkyy.firebaseio.com/geodata'),
-    geo = new geoFire(geoRef);
-
-    google.maps.event.addListener(map, 'dragend', function(){
-        //getMarkers();
-    });
-
-    google.maps.event.addListenerOnce(map, 'idle', function() {
-       getMarkers();
-    });
-
-    function getMarkers(){
-      geo.getPointsNearLoc([position.coords.latitude, position.coords.latitude], 5, function(points) {
-        for (var i = 0; i < points.length; i++){
-          var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(points[i].lat, points[i].lon),
-            icon: 'img/sportscar.png',
-            map: map
-          });
-        }
-      });
-    } */
-  
   return {
     restrict: 'A',
-    controller: function($scope, $rootScope, Map, Location){
-      this.getLocation = Location.getLocation;
-      this.Map = Map;
-    },
     link: function(scope, element, attrs, ctrl){
       var map;
       var mapOptions = {
@@ -153,16 +115,16 @@ angular.module('parky.directives', ['parky.services'])
         ]
       };
 
-      ctrl.getLocation().then(
+      Location.getLocation().then(
         function(pos){
           var lat = pos.coords.latitude;
           var lon = pos.coords.longitude;
           mapOptions.center = new google.maps.LatLng(lat, lon);
           map = new google.maps.Map(element[0], mapOptions);
-          ctrl.Map.setMap(map);
-          ctrl.Map.setUserLocation(lat, lon);
-          google.maps.event.addListenerOnce(ctrl.Map.getMap(), 'idle', function(){
-      });
+          Map.setMap(map);
+          Map.setUserLocation(lat, lon);
+          //Location.startTracking();
+          //google.maps.event.addListenerOnce(Map.getMap(), 'idle', function(){});
         },
         function(error){
           alert(error);

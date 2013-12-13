@@ -66,7 +66,7 @@
             <h1 class="title">Register</h1>
             <button class="button button-clear" ng-click="closeModal()">Cancel</button>
           </header>
-          <content has-header="true">
+          <content has-header="true"scroll="false">
             <form id="register_form" method="post">
               <div class="padding">
                 <div class="list">
@@ -98,7 +98,7 @@
                 <i class="icon ion-log-out"></i>
               </button>
             </header>
-            <content has-header="true" >
+            <content has-header="true" scroll="false">
               <div id="mapContainer">
                 <img ng-click="snapToLocation()" id="target" src="img/locate.png">
                 <div google-map class="map"></div>

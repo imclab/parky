@@ -35,10 +35,18 @@ angular.module('parky.services', ['firebase'])
 
 
 .factory('FirebaseService', function($q){
+  var idRef = new Firebase('https://parkyy.firebaseio.com/idCount');
+  var geoRef = new Firebase('https://parkyy.firebaseio.com/geo'),  
+  geo = new geoFire(geoRef);
+
 
   return {
+
+    insertWithId: function(pos, id, spot){
+      geo.insertByLocWithId([pos.lat(), pos.lng()], id, spot);
+    },
+
     getNextIdAndInc: function(){
-      var idRef = new Firebase('https://parkyy.firebaseio.com/idCount');
       var defer = $q.defer();
       var currentId = 0;
       var updated = false;
@@ -75,7 +83,7 @@ angular.module('parky.services', ['firebase'])
       function(error) {
         defer.reject(error);
       },
-      { enableHighAccuracy: true, timeout: 3000, maximumAge: 0}
+      { enableHighAccuracy: true, timeout: 30000, maximumAge: 0}
     );
 
     return defer.promise;
@@ -105,7 +113,7 @@ angular.module('parky.services', ['firebase'])
             break;
         }
       },
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 5000 }
+      { enableHighAccuracy: true, timeout: 30000, maximumAge: 5000 }
     );
   };
 

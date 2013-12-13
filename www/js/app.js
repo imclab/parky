@@ -54,12 +54,17 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
 .controller('MapCtrl', function($scope, $rootScope, $location, Auth, Map, Location, FirebaseService){
 
-    $rootScope.modal.hide();
-    var geoRef = new Firebase('https://parkyy.firebaseio.com/geo'),
-    
-    geo = new geoFire(geoRef);
+    if ($rootScope.modal) $rootScope.modal.hide();
 
-    Location.startTracking();
+    //Location.startTracking();
+
+    $scope.markers = [];
+
+    var geoRef = new Firebase('https://parkyy.firebaseio.com/geo/geoFire/dataByHash');  
+
+    geoRef.on('child_added', function(snapshot){
+      alert(JSON.stringify(snapshot.val()));
+    }); 
 
     $scope.logout = function(){
       Auth.logout();
@@ -100,7 +105,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
             spot = {
               time: new Date().getTime()
             };
-            geo.insertByLocWithId([pos.lat(), pos.lng()], id, spot);
+            FirebaseService.insertWithId(pos, id, spot); 
           }); 
 
         }
@@ -116,5 +121,12 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     $scope.$on('locationChange', function(coords){
       Map.updateUserLocation(coords.latitude, coords.longitude);
     });
+
+    $scope.markers = [];
+    var spotsRef = new Firebase('https://parkyy.firebaseio.com/geo/geoFire/dataByHash');
+    spotsRef.on('child_added', function(snapshot){
+      $scope.markers.push(snapshot.val()); 
+    })
+
 
 })
