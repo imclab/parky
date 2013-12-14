@@ -52,13 +52,54 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
 })
 
-.controller('MapCtrl', function($scope, $rootScope, $location, Auth, Map, Location, FirebaseService){
+.controller('MapCtrl', function($scope, $rootScope, $location, $timeout, Auth, Map, Location, FirebaseService){
 
     if ($rootScope.modal) $rootScope.modal.hide();
 
     $scope.spots = [];
+    $scope.markers = [];
 
     var geoRef = new Firebase('https://parkyy.firebaseio.com/geo/geoFire/dataById');  
+
+    function getIcon(spot){
+      var now = new Date().getTime();
+      var timeDelta = (now - spot.time) / 1000;
+      var minute = 60 * 1000;
+      if (timeDelta < minute){
+
+      }
+      else if (timeDelta < 5 * minute){
+
+      }
+      else if (timeDelta < 10 * minute){
+
+      }
+      else if (timeDelta < 15 * minute){
+      
+      }
+      else if (timeDelta < 20 * minute){
+      
+      }
+      else {
+      
+      }
+
+    };
+      
+    $scope.updateSpots = function(){
+      for (var i = 0; i < markers.length; i++){
+        var spot = $scope.spots[i];
+        var marker = $scope.markers[i];
+      }
+    };
+
+    $scope.takeSpot = function(id){
+      alert('spot with id: ' + id + ' clicked.');
+    } 
+  
+   // setInterval( function(){
+    //  alert("one minute"); 
+    //}, (60 * 1000));
     
     //no idea why this is necessary, but firebase apparently breaks geolocation
     $scope.$on('mapLoad', function(){
@@ -101,7 +142,8 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
             spot = {
               time: new Date().getTime(),
               lat: pos.lat(),
-              lng: pos.lng()
+              lng: pos.lng(),
+              id: id
             };
             FirebaseService.insertWithId(pos, id, spot); 
           }); 
@@ -119,12 +161,5 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     $scope.$on('locationChange', function(coords){
       Map.updateUserLocation(coords.latitude, coords.longitude);
     });
-
-    $scope.markers = [];
-    var spotsRef = new Firebase('https://parkyy.firebaseio.com/geo/geoFire/dataByHash');
-    spotsRef.on('child_added', function(snapshot){
-      $scope.markers.push(snapshot.val()); 
-    })
-
 
 })
