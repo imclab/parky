@@ -61,27 +61,27 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
     var geoRef = new Firebase('https://parkyy.firebaseio.com/geo/geoFire/dataById');  
 
-    function getIcon(spot){
+    $scope.getIcon = function(spot){
       var now = new Date().getTime();
-      var timeDelta = (now - spot.time) / 1000;
+      var timeDelta = (now - spot.time);
       var minute = 60 * 1000;
       if (timeDelta < minute){
-
+        return "img/car-red.png";
       }
       else if (timeDelta < 5 * minute){
-
+        return "img/car-orange.png";
       }
       else if (timeDelta < 10 * minute){
-
+        return "img/car-yellow.png";
       }
       else if (timeDelta < 15 * minute){
-      
+        return "img/car-green.png";
       }
       else if (timeDelta < 20 * minute){
-      
+        return "img/car-blue.png";
       }
       else {
-      
+        FirebaseService.remove(spot.id); 
       }
 
     };
@@ -94,7 +94,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     };
 
     $scope.takeSpot = function(id){
-      alert('spot with id: ' + id + ' clicked.');
+
     } 
   
    // setInterval( function(){

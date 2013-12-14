@@ -131,7 +131,7 @@ angular.module('parky.directives', ['parky.services'])
             var spot = newSpots[newSpots.length-1]
             var marker = new google.maps.Marker({
               position: new google.maps.LatLng(spot.lat, spot.lng), 
-              icon: 'img/sportscar.png',
+              icon: scope.getIcon(spot),
               map: map,
             });
             var infoWindowContent = "<div><div>Age: " + Math.round((((new Date().getTime())-spot.time) / 60000)) + " minutes </div>" +

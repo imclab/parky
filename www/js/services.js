@@ -42,6 +42,10 @@ angular.module('parky.services', ['firebase'])
 
   return {
 
+    remove: function(id){
+      geo.removeById(id);
+    },
+
     insertWithId: function(pos, id, spot){
       geo.insertByLocWithId([pos.lat(), pos.lng()], id, spot);
     },
