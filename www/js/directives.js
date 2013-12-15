@@ -128,29 +128,33 @@ angular.module('parky.directives', ['parky.services'])
           //google.maps.event.addListenerOnce(Map.getMap(), 'idle', function(){});
           scope.$watch('spots', function(newSpots, oldSpots){
             if (oldSpots === newSpots) return;
-            var spot = newSpots[newSpots.length-1]
-            var marker = new google.maps.Marker({
-              position: new google.maps.LatLng(spot.lat, spot.lng), 
-              icon: scope.getIcon(spot),
-              map: map,
-            });
-            var infoWindowContent = "<div><div>Age: " + Math.round((((new Date().getTime())-spot.time) / 60000)) + " minutes </div>" +
-                                    "<button ng-click=\"takeSpot(" + spot.id + ")\">Take Spot</button></div>";
-            var e = angular.element(infoWindowContent);
+            if (oldSpots.length < newSpots.length){
+              var spot = newSpots[newSpots.length-1]
+              var marker = new google.maps.Marker({
+                position: new google.maps.LatLng(spot.lat, spot.lng), 
+                icon: scope.getIcon(spot),
+                map: map,
+              });
+              var infoWindowContent = "<div><div>Age: " + Math.round((((new Date().getTime())-spot.time) / 60000)) + " minutes </div>" +
+                                      "<button ng-click=\"takeSpot(" + spot.id + ")\">Take Spot</button></div>";
+              var e = angular.element(infoWindowContent);
 
-            var compiled = $compile(e)(scope);
-            var infoWindow = new google.maps.InfoWindow({
-              content: compiled[0]
-            });
-            google.maps.event.addListener(marker, 'click', function(){
-              if (scope.currentInfoWindow) {
-                scope.currentInfoWindow.close();
-              }
-              infoWindow.open(map, marker);
-              scope.currentInfoWindow = infoWindow;
-            });
-            scope.markers.push(marker);
-            
+              var compiled = $compile(e)(scope);
+              var infoWindow = new google.maps.InfoWindow({
+                content: compiled[0]
+              });
+              google.maps.event.addListener(marker, 'click', function(){
+                if (scope.currentInfoWindow) {
+                  scope.currentInfoWindow.close();
+                }
+                infoWindow.open(map, marker);
+                scope.currentInfoWindow = infoWindow;
+              });
+              scope.markers[spot.id] = marker;
+            }
+            else { //spot removed not added
+              
+            }
           }, true);
         },
         function(error){

@@ -94,7 +94,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     };
 
     $scope.takeSpot = function(id){
-
+      FirebaseService.remove(id); 
     } 
   
    // setInterval( function(){
@@ -103,8 +103,26 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     
     //no idea why this is necessary, but firebase apparently breaks geolocation
     $scope.$on('mapLoad', function(){
+
+      /*geoRef.once("value", function(snapshot){
+        snapshot.forEach(function(spot){
+          $scope.spots.push(spot.val());
+        });
+      }
+      */
       geoRef.on('child_added', function(snapshot){
         $scope.spots.push(snapshot.val());
+        $scope.$apply();
+      });
+      geoRef.on('child_removed', function(snapshot){
+        var spot = snapshot.val();
+        for (var i=0; i<$scope.spots.length; i++){
+          if (angular.equals($scope.spots[i], spot)){
+            $scope.spots.splice(i, 1); 
+            $scope.markers[spot.id].setMap(null);
+            $scope.markers[spot.id] = null;
+          }
+        }
         $scope.$apply();
       });
     });  
