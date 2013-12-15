@@ -164,7 +164,6 @@ angular.module('parky.services', ['firebase'])
       },
       map: _map,
     });
-    this.currentCoords = {latitude: lat, longitude: lon};
   }
 
   this.updateUserLocation = function(lat, lon){
@@ -180,7 +179,6 @@ angular.module('parky.services', ['firebase'])
       },
       map: _map,
     }); 
-    this.currentCoords = {latitude: lat, longitude: lon};
   }
 
 })

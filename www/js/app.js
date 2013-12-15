@@ -95,6 +95,36 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       }
     };
 
+    $scope.getDirections = function(id){
+      var dirDisplay = new google.maps.DirectionsRenderer();
+      var dirService = new google.maps.DirectionsService();
+      var pos = Location.getCurrentLocation();
+      var lat = pos.coords.latitude;
+      var lon = pos.coords.longitude;
+      for(var i=0; i < $scope.spots.length; i++){
+        if ($scope.spots[i].id === id){
+          var spot = $scope.spots[i];
+        }
+      }
+      var spotLatLon = new google.maps.LatLng(spot.lat, spot.lng);
+      var userLatLon = new google.maps.LatLng(lat, lon);
+      var request = {
+        origin: userLatLon,
+        destination: spotLatLon, 
+        travelMode: google.maps.TravelMode.DRIVING
+      };
+
+      dirDisplay.setMap(Map.getMap());
+
+      dirService.route(request, function(response, status){
+        if (status == google.maps.DirectionsStatus.OK) {
+          dirDisplay.setOptions({ preserveViewport: true });
+          dirDisplay.setDirections(response);
+        }
+      });
+ 
+    };
+
     function getDistance(lat1, lat2, lon1, lon2){
       var R = 6371; // km
       var lat1R = lat1.toRad();
@@ -165,8 +195,9 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     $scope.shareSpot = function() {
       var dirDisplay = new google.maps.DirectionsRenderer();
       var dirService = new google.maps.DirectionsService();
-      var lat = Map.currentCoords.latitude;
-      var lon = Map.currentCoords.longitude;
+      var pos = Location.getCurrentLocation();
+      var lat = pos.coords.latitude;
+      var lon = pos.coords.longitude;
       var latLon = new google.maps.LatLng(lat, lon);
       var request = {
         origin: latLon,

@@ -136,7 +136,8 @@ angular.module('parky.directives', ['parky.services'])
                 map: map,
               });
               var infoWindowContent = "<div><div>Age: " + Math.round((((new Date().getTime())-spot.time) / 60000)) + " minutes </div>" +
-                                      "<button ng-click=\"takeSpot(" + spot.id + ")\">Take Spot</button></div>";
+                                      "<button ng-click=\"takeSpot(" + spot.id + ")\">Take Spot</button><br>" + 
+                                      "<button ng-click=\"getDirections(" + spot.id + ")\">Get Directions</button></div>";
               var e = angular.element(infoWindowContent);
 
               var compiled = $compile(e)(scope);
