@@ -123,6 +123,11 @@ angular.module('parky.directives', ['parky.services'])
           map = new google.maps.Map(element[0], mapOptions);
           Map.setMap(map);
           Map.setUserLocation(lat, lon);
+          var searchBox = new google.maps.places.SearchBox(document.getElementById('searchbox'));
+          google.maps.event.addListener(searchBox, 'places_changed', function() {
+            var place = searchBox.getPlaces();
+            scope.goToSearch(place[0].geometry.location);
+          });
           $rootScope.$broadcast('mapLoad');
           //Location.startTracking();
           //google.maps.event.addListenerOnce(Map.getMap(), 'idle', function(){});

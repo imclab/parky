@@ -8,7 +8,7 @@
       <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase-simple-login.js'></script>
       <script type="text/javascript" src="js/geoFire.js"></script>
 
-      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGBlm0sR7qvyOtPx3VkZMR_nijk6XYiHI&sensor=true">
+      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAGBlm0sR7qvyOtPx3VkZMR_nijk6XYiHI&sensor=true&libraries=places">
       </script>
 
       <link rel="stylesheet" href="css/ionic.css">
@@ -88,6 +88,7 @@
 
       <script id="map.html" type="text/ng-template">
         <side-menus>
+          <img ng-click="snapToLocation()" id="target" src="img/locate.png">
           <pane side-menu-content>
             <header class="bar bar-header bar-calm">
               <button class="button button-calm" ng-click="toggleMenu()">
@@ -100,7 +101,6 @@
             </header>
             <content has-header="true" scroll="false">
               <div id="mapContainer">
-                <img ng-click="snapToLocation()" id="target" src="img/locate.png">
                 <div google-map class="map"></div>
               </div>
               <button ng-click="shareSpot()" class="button button-block button-energized">Share Spot</button>
@@ -112,9 +112,11 @@
             </header>
             <content has-header="true" scroll="false">
               <list>
-                <item> 
-                  Hello World
-                </item>
+                <button class="item button-full" ng-click="clearDirections()">Clear Directions</button>
+                <label class="item item-input item-stacked-label">
+                  <span class="input-label">Search</span>
+                  <input id="searchbox" ng-model="search" type="text" placeholder="Madison, WI">
+                </label>
               </list>
             </content>
           </side-menu>

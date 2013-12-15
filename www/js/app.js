@@ -95,9 +95,14 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       }
     };
 
+    var spotDirDisplay;
+    var spotDirService;
+    var dirSet = false;
+
     $scope.getDirections = function(id){
-      var dirDisplay = new google.maps.DirectionsRenderer();
-      var dirService = new google.maps.DirectionsService();
+      if (dirSet) spotDirDisplay.setMap(null);
+      spotDirDisplay = new google.maps.DirectionsRenderer();
+      spotDirService = new google.maps.DirectionsService();
       var pos = Location.getCurrentLocation();
       var lat = pos.coords.latitude;
       var lon = pos.coords.longitude;
@@ -114,16 +119,27 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         travelMode: google.maps.TravelMode.DRIVING
       };
 
-      dirDisplay.setMap(Map.getMap());
+      spotDirDisplay.setMap(Map.getMap());
 
-      dirService.route(request, function(response, status){
+      spotDirService.route(request, function(response, status){
         if (status == google.maps.DirectionsStatus.OK) {
-          dirDisplay.setOptions({ preserveViewport: true });
-          dirDisplay.setDirections(response);
+          spotDirDisplay.setOptions(
+            { 
+              preserveViewport: true,
+              suppressMarkers: true
+            }
+          );
+          spotDirDisplay.setDirections(response);
+          dirSet = true;
         }
       });
  
     };
+
+    $scope.clearDirections = function(){
+      if (dirSet) spotDirDisplay.setMap(null);
+    }
+    
 
     function getDistance(lat1, lat2, lon1, lon2){
       var R = 6371; // km
@@ -192,6 +208,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       $scope.sideMenuController.toggleLeft();
     };
 
+
     $scope.shareSpot = function() {
       var dirDisplay = new google.maps.DirectionsRenderer();
       var dirService = new google.maps.DirectionsService();
@@ -229,7 +246,13 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     };
     
     $scope.snapToLocation = function(){
-      Map.getMap().panTo(new google.maps.LatLng(Map.currentCoords.latitude, Map.currentCoords.longitude)); 
+      var pos = Location.getCurrentLocation();
+      Map.getMap().panTo(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude)); 
+    }
+
+    //position will be a google maps LatLng object
+    $scope.goToSearch = function(position){
+      Map.getMap().panTo(position); 
     }
 
     $scope.$on('locationChange', function(coords){
