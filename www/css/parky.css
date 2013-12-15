@@ -1,10 +1,15 @@
 #mapContainer {
-    height: 480px;
+    height: 100%;
     width: 100%;
 }
 .map {
-  height: 480px;
+  height: 100%;
   width: 100%;
+}
+#share {
+  position: absolute;
+  bottom: 0;
+  margin: 0;
 }
 #target {
   position: absolute;

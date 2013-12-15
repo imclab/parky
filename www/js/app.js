@@ -58,7 +58,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
     if ($rootScope.modal) $rootScope.modal.hide();
 
-    $scope.spots = [];
+    $scope.spots = {};
 
     var geoRef = new Firebase('https://parkyy.firebaseio.com/geo/geoFire/dataById');  
 
@@ -226,7 +226,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         var spot = snapshot.val();
         $scope.spots[spot.id].marker.setMap(null);
         $scope.spots[spot.id].marker = null;
-        $scope.spots.splice(spot.id, 1); 
+        delete $scope.spots[spot.id]; 
         $scope.$apply();
       });
     });  
