@@ -54,18 +54,21 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 
 })
 
-.controller('MapCtrl', function($scope, $rootScope, $location, $timeout, Auth, Map, Location, FirebaseService){
+.controller('MapCtrl', function($scope, $rootScope, $location, $timeout, $compile, Auth, Map, Location, FirebaseService){
 
     if ($rootScope.modal) $rootScope.modal.hide();
 
     $scope.spots = [];
-    $scope.markers = [];
 
     var geoRef = new Firebase('https://parkyy.firebaseio.com/geo/geoFire/dataById');  
 
-    $scope.getIcon = function(spot){
+    function getTimeDelta(spot){
       var now = new Date().getTime();
-      var timeDelta = (now - spot.time);
+      return (now - spot.time);
+    }
+
+    $scope.getIcon = function(spot){
+      var timeDelta = getTimeDelta(spot);
       var minute = 60 * 1000;
       if (timeDelta < minute){
         return "img/car-red.png";
@@ -83,17 +86,28 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         return "img/car-blue.png";
       }
       else {
-        FirebaseService.remove(spot.id); 
+        return null;
       }
-
     };
       
     $scope.updateSpots = function(){
-      for (var i = 0; i < markers.length; i++){
+      for (var i in $scope.spots){
         var spot = $scope.spots[i];
-        var marker = $scope.markers[i];
+        var marker = spot.marker;
+        var icon = $scope.getIcon(spot); 
+        if (!icon){
+          FirebaseService.remove(spot.id);
+        }
+        else {
+          marker.setIcon(icon);
+          spot.age = getTimeDelta(spot);
+        }
       }
     };
+    
+    setInterval(function(){
+      $scope.updateSpots(); 
+    }, 60000);
 
     var spotDirDisplay;
     var spotDirService;
@@ -106,11 +120,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       var pos = Location.getCurrentLocation();
       var lat = pos.coords.latitude;
       var lon = pos.coords.longitude;
-      for(var i=0; i < $scope.spots.length; i++){
-        if ($scope.spots[i].id === id){
-          var spot = $scope.spots[i];
-        }
-      }
+      var spot = $scope.spots[id];
       var spotLatLon = new google.maps.LatLng(spot.lat, spot.lng);
       var userLatLon = new google.maps.LatLng(lat, lon);
       var request = {
@@ -154,18 +164,14 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     };
 
     $scope.takeSpot = function(id){
-      for (var i=0; i < $scope.spots.length; i++){
-        if ($scope.spots[i].id === id){
-          var spot = $scope.spots[i];
-          var currentPos = Location.getCurrentLocation();
-          var d = getDistance(currentPos.coords.latitude, spot.lat, currentPos.coords.longitude, spot.lng);
-          if (d < 0.1){
-            FirebaseService.remove(id); 
-            return; 
-          }
-          alert('You aren\'t close enough to take that spot');
-        }
+      var spot = $scope.spots[id];
+      var currentPos = Location.getCurrentLocation();
+      var d = getDistance(currentPos.coords.latitude, spot.lat, currentPos.coords.longitude, spot.lng);
+      if (d < 0.1){
+        FirebaseService.remove(id); 
+        return; 
       }
+      alert('You aren\'t close enough to take that spot');
     } 
   
    // setInterval( function(){
@@ -182,18 +188,45 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       }
       */
       geoRef.on('child_added', function(snapshot){
-        $scope.spots.push(snapshot.val());
-        $scope.$apply();
+        var spot = snapshot.val();
+        var icon = $scope.getIcon(spot);
+        var map = Map.getMap();
+        if (icon){
+          var marker = new google.maps.Marker({
+            position: new google.maps.LatLng(spot.lat, spot.lng), 
+            icon: icon,
+            map: map,
+          });
+          spot.marker = marker;
+          var infoWindowContent = "<div><div>Age: 0 minutes </div>" +
+                                  "<button ng-click=\"takeSpot(" + spot.id + ")\">Take Spot</button><br>" + 
+                                  "<button ng-click=\"getDirections(" + spot.id + ")\">Get Directions</button></div>";
+          var e = angular.element(infoWindowContent);
+
+          var compiled = $compile(e)($scope);
+          var infoWindow = new google.maps.InfoWindow({
+            content: compiled[0]
+          });
+          google.maps.event.addListener(marker, 'click', function(){
+            if ($scope.currentInfoWindow) {
+              $scope.currentInfoWindow.close();
+            }
+            infoWindow.open(map, marker);
+            $scope.currentInfoWindow = infoWindow;
+          });
+          $scope.spots[spot.id] = spot;
+          $scope.$apply();
+        }
+        else {
+          FirebaseService.remove(spot.id);
+        } 
       });
+
       geoRef.on('child_removed', function(snapshot){
         var spot = snapshot.val();
-        for (var i=0; i<$scope.spots.length; i++){
-          if (angular.equals($scope.spots[i], spot)){
-            $scope.spots.splice(i, 1); 
-            $scope.markers[spot.id].setMap(null);
-            $scope.markers[spot.id] = null;
-          }
-        }
+        $scope.spots[spot.id].marker.setMap(null);
+        $scope.spots[spot.id].marker = null;
+        $scope.spots.splice(spot.id, 1); 
         $scope.$apply();
       });
     });  
@@ -232,6 +265,8 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
           FirebaseService.getNextIdAndInc().then(function(id){
             spot = {
               time: new Date().getTime(),
+              marker: null,
+              age: 0, 
               lat: pos.lat(),
               lng: pos.lng(),
               id: id

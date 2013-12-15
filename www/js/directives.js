@@ -1,6 +1,6 @@
 angular.module('parky.directives', ['parky.services'])
 
-.directive("googleMap", function($rootScope, $compile, Map, Location) {
+.directive("googleMap", function($rootScope, $compile, Map, Location, FirebaseService) {
 
   return {
     restrict: 'A',
@@ -131,37 +131,6 @@ angular.module('parky.directives', ['parky.services'])
           $rootScope.$broadcast('mapLoad');
           //Location.startTracking();
           //google.maps.event.addListenerOnce(Map.getMap(), 'idle', function(){});
-          scope.$watch('spots', function(newSpots, oldSpots){
-            if (oldSpots === newSpots) return;
-            if (oldSpots.length < newSpots.length){
-              var spot = newSpots[newSpots.length-1]
-              var marker = new google.maps.Marker({
-                position: new google.maps.LatLng(spot.lat, spot.lng), 
-                icon: scope.getIcon(spot),
-                map: map,
-              });
-              var infoWindowContent = "<div><div>Age: " + Math.round((((new Date().getTime())-spot.time) / 60000)) + " minutes </div>" +
-                                      "<button ng-click=\"takeSpot(" + spot.id + ")\">Take Spot</button><br>" + 
-                                      "<button ng-click=\"getDirections(" + spot.id + ")\">Get Directions</button></div>";
-              var e = angular.element(infoWindowContent);
-
-              var compiled = $compile(e)(scope);
-              var infoWindow = new google.maps.InfoWindow({
-                content: compiled[0]
-              });
-              google.maps.event.addListener(marker, 'click', function(){
-                if (scope.currentInfoWindow) {
-                  scope.currentInfoWindow.close();
-                }
-                infoWindow.open(map, marker);
-                scope.currentInfoWindow = infoWindow;
-              });
-              scope.markers[spot.id] = marker;
-            }
-            else { //spot removed not added
-              
-            }
-          }, true);
         },
         function(error){
           alert(error.code + ": "+ error.message);
