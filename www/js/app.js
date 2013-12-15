@@ -11,6 +11,8 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
 				controller  : 'MapCtrl',
         authRequired: true
 			});
+
+    Number.prototype.toRad = function() { return this * (Math.PI / 180); };
 })
 
 
@@ -93,8 +95,31 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       }
     };
 
+    function getDistance(lat1, lat2, lon1, lon2){
+      var R = 6371; // km
+      var lat1R = lat1.toRad();
+      var lon1R = lon1.toRad();
+      var lat2R = lat2.toRad();
+      var lon2R = lon2.toRad();
+      var d = Math.acos(Math.sin(lat1R)*Math.sin(lat2R) + 
+                  Math.cos(lat1R)*Math.cos(lat2R) *
+                  Math.cos(lon2R-lon1R)) * R;
+      return d;
+    };
+
     $scope.takeSpot = function(id){
-      FirebaseService.remove(id); 
+      for (var i=0; i < $scope.spots.length; i++){
+        if ($scope.spots[i].id === id){
+          var spot = $scope.spots[i];
+          var currentPos = Location.getCurrentLocation();
+          var d = getDistance(currentPos.coords.latitude, spot.lat, currentPos.coords.longitude, spot.lng);
+          if (d < 0.1){
+            FirebaseService.remove(id); 
+            return; 
+          }
+          alert('You aren\'t close enough to take that spot');
+        }
+      }
     } 
   
    // setInterval( function(){

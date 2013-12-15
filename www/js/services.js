@@ -46,6 +46,10 @@ angular.module('parky.services', ['firebase'])
       geo.removeById(id);
     },
 
+    getPointsNearId: function(id, radius, callback){
+      geo.getPointsNearId(id, radius, callback);
+    },
+
     insertWithId: function(pos, id, spot){
       geo.insertByLocWithId([pos.lat(), pos.lng()], id, spot);
     },
@@ -87,6 +91,7 @@ angular.module('parky.services', ['firebase'])
 
     navigator.geolocation.getCurrentPosition(
       function(position) {
+        currentPos = position;
         defer.resolve(position);
       },
       function(error) {
