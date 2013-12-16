@@ -294,8 +294,14 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       Map.updateUserLocation(coords.latitude, coords.longitude);
     });
 
+    var five_min = 60 * 1000 * 5;
     $scope.testSpots = {};
-    $scope.testSpots[1000] = {
+
+
+
+
+    $scope.loadTestData = function(){
+          $scope.testSpots[1000] = {
         time: new Date().getTime(),
         marker: null,
         age: 0, 
@@ -304,7 +310,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1000
     }
     $scope.testSpots[1001] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - (3*five_min),
         marker: null,
         age: 0, 
         lat: 43.07686770509459,
@@ -320,7 +326,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1002
     }
     $scope.testSpots[1003] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - five_min,
         marker: null,
         age: 0, 
         lat: 43.07449912396163,
@@ -328,7 +334,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1003
     }
     $scope.testSpots[1004] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - (2*five_min),
         marker: null,
         age: 0, 
         lat: 43.07208526400504,
@@ -336,7 +342,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1004
     }
     $scope.testSpots[1005] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - five_min,
         marker: null,
         age: 0, 
         lat: 43.068856185801714,
@@ -344,7 +350,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1005
     }
     $scope.testSpots[1006] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - 60001,
         marker: null,
         age: 0, 
         lat: 43.07380945938997,
@@ -352,15 +358,15 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1006
     }
     $scope.testSpots[1007] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - (2 * five_min),
         marker: null,
         age: 0, 
-        lat: 43.07380945938997,
-        lng: -89.39213214442134,
+        lat: 43.07205391454905,
+        lng: -89.41393313929439,
         id: 1007
     }
     $scope.testSpots[1008] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - 60001,
         marker: null,
         age: 0, 
         lat: 43.07556495394268,
@@ -376,7 +382,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1009
     }
     $scope.testSpots[1010] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - 60001,
         marker: null,
         age: 0, 
         lat: 43.07239875768307,
@@ -384,7 +390,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1010
     }
     $scope.testSpots[1011] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - five_min,
         marker: null,
         age: 0, 
         lat: 43.07139557226882,
@@ -392,7 +398,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1011
     }
     $scope.testSpots[1012] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - (3*five_min),
         marker: null,
         age: 0, 
         lat: 43.07274359887679,
@@ -400,7 +406,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1012
     }
     $scope.testSpots[1013] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - (3*five_min),
         marker: null,
         age: 0, 
         lat: 43.07656807110861,
@@ -416,7 +422,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1014
     }
     $scope.testSpots[1015] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - five_min + 10,
         marker: null,
         age: 0, 
         lat: 43.07280629706716,
@@ -424,7 +430,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1015
     }
     $scope.testSpots[1016] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - five_min,
         marker: null,
         age: 0, 
         lat: 43.07280629706716,
@@ -432,7 +438,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1016
     }
     $scope.testSpots[1017] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - (3*five_min),
         marker: null,
         age: 0, 
         lat: 43.07180311832376,
@@ -440,7 +446,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1017
     }
     $scope.testSpots[1018] = {
-        time: new Date().getTime(),
+        time: new Date().getTime() - (five_min - 10),
         marker: null,
         age: 0, 
         lat: 43.071583670784776,
@@ -448,17 +454,21 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
         id: 1018
     }
     $scope.testSpots[1019] = {
+        time: new Date().getTime() - 60001,
+        marker: null,
+        age: 0, 
+        lat: 43.06800970026609,
+        lng: -89.41041408106685,
+        id: 1019
+    }
+    $scope.testSpots[1020] = {
         time: new Date().getTime(),
         marker: null,
         age: 0, 
-        lat: 43.071583670784776,
-        lng: -89.4074529223144,
-        id: 1019
+        lat: 43.06970265964738,
+        lng: -89.40689502283931,
+        id: 1020
     }
-
-
-
-    $scope.loadTestData = function(){
       for (var i in $scope.testSpots){
         var spot = $scope.testSpots[i];
         FirebaseService.insertWithId([spot.lat, spot.lng], spot.id, spot);
@@ -469,6 +479,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
       for (var i in $scope.testSpots){
         var id = $scope.testSpots[i].id;
         FirebaseService.remove(id);
+        delete $scope.testSpots[i];
       }
     }
 
