@@ -51,7 +51,11 @@ angular.module('parky.services', ['firebase'])
     },
 
     insertWithId: function(pos, id, spot){
-      geo.insertByLocWithId([pos.lat(), pos.lng()], id, spot);
+      if (pos.lat){
+        geo.insertByLocWithId([pos.lat(), pos.lng()], id, spot);
+        return;
+      }
+      geo.insertByLocWithId([pos[0], pos[1]], id, spot);
     },
 
     getNextIdAndInc: function(){
@@ -156,6 +160,7 @@ angular.module('parky.services', ['firebase'])
     userMarker = new google.maps.Marker({
       clickable: false,
       position: new google.maps.LatLng(lat, lon), 
+      zIndex: google.maps.Marker.MAX_ZINDEX + 1,
       icon: {
         url: 'http://maps.gstatic.com/mapfiles/mobile/mobileimgs1.png',
         size: new google.maps.Size(22, 22),

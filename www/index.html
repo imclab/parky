@@ -1,7 +1,7 @@
 <!DOCTYPE html>
     <head>
       <meta charset="utf-8">
-      <title>Parky</title>
+      <title>ParkSolid</title>
       <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no" />
 
       <script type='text/javascript' src='https://cdn.firebase.com/v0/firebase.js'></script>
@@ -39,7 +39,7 @@
 
       <script id="login.html" type="text/ng-template">
         <header class="bar bar-header bar-calm">
-          <h1 class="title">Parky</h1>
+          <h1 class="title">ParkSolid</h1>
         </header>
         <content has-header="true" scroll="false">
           <form id="login_form" method="post">
@@ -94,7 +94,7 @@
               <button class="button button-calm" ng-click="toggleMenu()">
                 <i class="icon ion-navicon"></i>
               </button>
-              <h1 class="title">Parky</h1> 
+              <h1 class="title">ParkSolid</h1> 
               <button class="button button-calm" ng-click="logout()">
                 <i class="icon ion-log-out"></i>
               </button>
@@ -112,11 +112,20 @@
             </header>
             <content has-header="true" scroll="false">
               <list>
-                <a class="item item-icon-right" ng-click="clearDirections()">Clear Directions</a>
                 <label class="item item-input item-stacked-label">
                   <span class="input-label">Search</span>
                   <input id="searchbox" ng-model="search" type="text" placeholder="Madison, WI">
                 </label>
+                <a class="item item-icon-right" ng-click="clearDirections()">Clear Directions</a>
+                <div class="item item-divider"></div>
+                <a class="item item-icon-right" ng-click="loadTestData()">
+                  <i class="icon ion-map"></i>
+                  Load Test Spots
+                </a>
+                <a class="item item-icon-right" ng-click="removeTestData()">
+                  <i class="icon ion-close"></i>
+                  Clear Test Spots
+                </a>
               </list>
             </content>
           </side-menu>

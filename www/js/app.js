@@ -198,7 +198,7 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
             map: map,
           });
           spot.marker = marker;
-          var infoWindowContent = "<div><div>Age: 0 minutes </div>" +
+          var infoWindowContent = "<div><div>Age: "+ Math.round(((new Date().getTime()) - spot.time) / (60*1000)) + " minutes</div>" +
                                   "<button ng-click=\"takeSpot(" + spot.id + ")\">Take Spot</button><br>" + 
                                   "<button ng-click=\"getDirections(" + spot.id + ")\">Get Directions</button></div>";
           var e = angular.element(infoWindowContent);
@@ -293,5 +293,183 @@ angular.module('parky', ['ionic', 'firebase', 'ngRoute', 'parky.directives', 'pa
     $scope.$on('locationChange', function(coords){
       Map.updateUserLocation(coords.latitude, coords.longitude);
     });
+
+    $scope.testSpots = {};
+    $scope.testSpots[1000] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.078192101598844,
+        lng: -89.39098415896297,
+        id: 1000
+    }
+    $scope.testSpots[1001] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07686770509459,
+        lng: -89.39428864046931,
+        id: 1001
+    }
+    $scope.testSpots[1002] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07580973465829,
+        lng: -89.39132748171687,
+        id: 1002
+    }
+    $scope.testSpots[1003] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07449912396163,
+        lng: -89.3816608004272,
+        id: 1003
+    }
+    $scope.testSpots[1004] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07208526400504,
+        lng: -89.38578067347407,
+        id: 1004
+    }
+    $scope.testSpots[1005] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.068856185801714,
+        lng: -89.39290462061763,
+        id: 1005
+    }
+    $scope.testSpots[1006] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07380945938997,
+        lng: -89.39213214442134,
+        id: 1006
+    }
+    $scope.testSpots[1007] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07380945938997,
+        lng: -89.39213214442134,
+        id: 1007
+    }
+    $scope.testSpots[1008] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07556495394268,
+        lng: -89.40075812861323,
+        id: 1008
+    }
+    $scope.testSpots[1009] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07584708230531,
+        lng: -89.39801154658198,
+        id: 1009
+    }
+    $scope.testSpots[1010] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07239875768307,
+        lng: -89.39741073176265,
+        id: 1010
+    }
+    $scope.testSpots[1011] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07139557226882,
+        lng: -89.39599452540278,
+        id: 1011
+    }
+    $scope.testSpots[1012] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07274359887679,
+        lng: -89.40067229792476,
+        id: 1012
+    }
+    $scope.testSpots[1013] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07656807110861,
+        lng: -89.40839705988765,
+        id: 1013
+    }
+    $scope.testSpots[1014] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.0752201286244,
+        lng: -89.40689502283931,
+        id: 1014
+    }
+    $scope.testSpots[1015] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07280629706716,
+        lng: -89.40689502283931,
+        id: 1015
+    }
+    $scope.testSpots[1016] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07280629706716,
+        lng: -89.40689502283931,
+        id: 1016
+    }
+    $scope.testSpots[1017] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.07180311832376,
+        lng: -89.41161571070552,
+        id: 1017
+    }
+    $scope.testSpots[1018] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.071583670784776,
+        lng: -89.4074529223144,
+        id: 1018
+    }
+    $scope.testSpots[1019] = {
+        time: new Date().getTime(),
+        marker: null,
+        age: 0, 
+        lat: 43.071583670784776,
+        lng: -89.4074529223144,
+        id: 1019
+    }
+
+
+
+    $scope.loadTestData = function(){
+      for (var i in $scope.testSpots){
+        var spot = $scope.testSpots[i];
+        FirebaseService.insertWithId([spot.lat, spot.lng], spot.id, spot);
+      }
+    };
+
+    $scope.removeTestData = function(){
+      for (var i in $scope.testSpots){
+        var id = $scope.testSpots[i].id;
+        FirebaseService.remove(id);
+      }
+    }
 
 })
